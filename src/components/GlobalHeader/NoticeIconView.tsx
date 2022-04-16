@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import type { ConnectProps } from 'umi';
 import { connect } from 'umi';
-import { Tag, message } from 'antd';
+import { message, Tag } from 'antd';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import type { NoticeItem } from '@/models/global';
@@ -44,7 +44,6 @@ class GlobalHeaderRight extends Component<GlobalHeaderRightProps> {
   handleNoticeClear = (title: string, key: string) => {
     const { dispatch } = this.props;
     message.success(`${'Emptied'} ${title}`);
-
     if (dispatch) {
       dispatch({
         type: 'global/clearNotices',
