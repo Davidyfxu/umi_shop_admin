@@ -38,7 +38,7 @@ const Login: React.FC<LoginProps> = (props) => {
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
     dispatch({
-      type: 'login/login',
+      type: 'Login/Login',
       payload: { ...values, type },
     });
   };
@@ -68,7 +68,7 @@ const Login: React.FC<LoginProps> = (props) => {
             key="account"
             tab={intl.formatMessage({
               id: 'pages.login.accountLogin.tab',
-              defaultMessage: 'Account password login',
+              defaultMessage: 'Account password Login',
             })}
           />
         </Tabs>

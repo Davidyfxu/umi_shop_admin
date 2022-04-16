@@ -2,7 +2,6 @@ import React from 'react';
 import { Spin } from 'antd';
 import isEqual from 'lodash/isEqual';
 import { isComponentClass } from './Secured';
-// eslint-disable-next-line import/no-cycle
 
 type PromiseRenderProps<T, K> = {
   ok: T;
@@ -11,7 +10,7 @@ type PromiseRenderProps<T, K> = {
 };
 
 type PromiseRenderState = {
-  component: React.ComponentClass | React.FunctionComponent;
+  component: any;
 };
 
 export default class PromiseRender<T, K> extends React.Component<
@@ -65,6 +64,7 @@ export default class PromiseRender<T, K> extends React.Component<
   ): React.FunctionComponent => {
     if (isComponentClass(target)) {
       const Target = target as React.ComponentClass;
+      // @ts-ignore
       return (props: any) => <Target {...props} />;
     }
     if (React.isValidElement(target)) {

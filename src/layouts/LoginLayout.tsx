@@ -2,17 +2,16 @@ import type { MenuDataItem } from '@ant-design/pro-layout';
 import { DefaultFooter, getMenuData, getPageTitle } from '@ant-design/pro-layout';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import type { ConnectProps } from 'umi';
-import { Link, SelectLang, useIntl, connect, FormattedMessage } from 'umi';
-import React from 'react';
+import { Link, SelectLang, useIntl, connect } from 'umi';
 import type { ConnectState } from '@/models/connect';
 import logo from '../assets/logo.svg';
-import styles from './UserLayout.less';
+import styles from './LoginLayout.less';
 
 export type UserLayoutProps = {
   breadcrumbNameMap: Record<string, MenuDataItem>;
 } & Partial<ConnectProps>;
 
-const UserLayout: React.FC<UserLayoutProps> = (props) => {
+const LoginLayout: React.FC<UserLayoutProps> = (props) => {
   const {
     route = {
       routes: [],
@@ -49,15 +48,10 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
             <div className={styles.header}>
               <Link to="/">
                 <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>Ant Design</span>
+                <span className={styles.title}>Umj商城</span>
               </Link>
             </div>
-            <div className={styles.desc}>
-              <FormattedMessage
-                id="pages.layouts.userLayout.title"
-                defaultMessage="Ant Design. The most influential Web design specification in Xihu District."
-              />
-            </div>
+            <div className={styles.desc}>Umj商城，基于TypeScript和UmiJS框架实现的后台管理系统</div>
           </div>
           {children}
         </div>
@@ -67,4 +61,4 @@ const UserLayout: React.FC<UserLayoutProps> = (props) => {
   );
 };
 
-export default connect(({ settings }: ConnectState) => ({ ...settings }))(UserLayout);
+export default connect(({ settings }: ConnectState) => ({ ...settings }))(LoginLayout);

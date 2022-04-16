@@ -1,49 +1,40 @@
 export default [
-    {
-        path: '/',
-        component: '../layouts/BlankLayout',
+  {
+    path: '/',
+    component: '../layouts/BlankLayout',
+    routes: [
+      {
+        path: '/login',
+        component: '../layouts/LoginLayout',
         routes: [
-            {
-                path: '/user',
-                component: '../layouts/UserLayout',
-                routes: [
-                    {
-                        name: 'login',
-                        path: '/user/login',
-                        component: './User/login',
-                    },
-                ],
-            },
-            {
-                path: '/',
-                component: '../layouts/SecurityLayout',
-                routes: [
-                    {
-                        path: '/',
-                        component: '../layouts/BasicLayout',
-                        authority: ['admin', 'user'],
-                        routes: [
-                            {
-                                path: '/admin',
-                                name: 'admin',
-                                icon: 'crown',
-                                component: './Admin',
-                                authority: ['admin'],
-                            },
-
-                            {
-                                component: './404',
-                            },
-                        ],
-                    },
-                    {
-                        component: './404',
-                    },
-                ],
-            },
+          {
+            name: 'login',
+            path: '/Login',
+            component: './Login',
+          },
         ],
-    },
-    {
-        component: './404',
-    },
+      },
+      {
+        path: '/',
+        component: '../layouts/SecurityLayout',
+        routes: [
+          {
+            path: '/',
+            component: '../layouts/BasicLayout',
+            routes: [
+              {
+                component: './404',
+              },
+            ],
+          },
+          {
+            component: './404',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    component: './404',
+  },
 ];

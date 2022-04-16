@@ -21,7 +21,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
 
       if (dispatch) {
         dispatch({
-          type: 'login/logout',
+          type: 'Login/logout',
         });
       }
 
@@ -81,7 +81,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   }
 }
 
-// @ts-ignore
 export default connect(({ user }: ConnectState) => ({ currentUser: user.currentUser }))(
   AvatarDropdown,
 );
