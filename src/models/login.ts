@@ -28,17 +28,21 @@ export type LoginModelType = {
 const Model: LoginModelType = {
   namespace: 'login',
 
-  state: {
-    status: undefined,
-  },
+  state: {},
 
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
+
+      if (!response.status) {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        // 跳转首页
+        history.replace('/');
+      }
+
       // Login successfully
       if (response.status === 'ok') {
         const urlParams = new URL(window.location.href);
@@ -80,11 +84,10 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      // 将token存入localStorage
+      localStorage.setItem('access_token', payload.access_token);
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
       };
     },
   },

@@ -32,14 +32,13 @@ const LoginMessage: React.FC<{
 const Login: React.FC<LoginProps> = (props) => {
   const { userLogin = {}, submitting } = props;
   const { status } = userLogin;
-  const [type, setType] = useState<string>('account');
   const intl = useIntl();
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
     dispatch({
-      type: 'Login/Login',
-      payload: { ...values, type },
+      type: 'login/login',
+      payload: { ...values },
     });
   };
   return (
@@ -59,11 +58,13 @@ const Login: React.FC<LoginProps> = (props) => {
           },
         }}
         onFinish={(values) => {
+          console.log(values);
+
           handleSubmit(values as LoginParamsType);
           return Promise.resolve();
         }}
       >
-        <Tabs activeKey={type} onChange={setType}>
+        <Tabs activeKey="account">
           <Tabs.TabPane
             key="account"
             tab={intl.formatMessage({
@@ -74,33 +75,24 @@ const Login: React.FC<LoginProps> = (props) => {
         </Tabs>
 
         {status === 'error' && !submitting && (
-          <LoginMessage
-            content={intl.formatMessage({
-              id: 'pages.login.accountLogin.errorMessage',
-              defaultMessage: 'Incorrect account or password（admin/ant.design)',
-            })}
-          />
+          <LoginMessage content={'Incorrect account or password(xyf@a.com/123123)'} />
         )}
 
         <ProFormText
-          name="userName"
+          name="email"
           fieldProps={{
             size: 'large',
             prefix: <UserOutlined className={styles.prefixIcon} />,
           }}
-          placeholder={intl.formatMessage({
-            id: 'pages.login.username.placeholder',
-            defaultMessage: 'Username: admin or user',
-          })}
+          placeholder={'邮箱: xyf@a.com'}
           rules={[
             {
               required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.login.username.required"
-                  defaultMessage="Please enter user name!"
-                />
-              ),
+              message: '请输入邮箱',
+            },
+            {
+              type: 'email',
+              message: '请输入正确的邮箱',
             },
           ]}
         />
@@ -110,19 +102,11 @@ const Login: React.FC<LoginProps> = (props) => {
             size: 'large',
             prefix: <LockOutlined className={styles.prefixIcon} />,
           }}
-          placeholder={intl.formatMessage({
-            id: 'pages.login.password.placeholder',
-            defaultMessage: 'Password: ant.design',
-          })}
+          placeholder={'Password: 123123'}
           rules={[
             {
               required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.login.password.required"
-                  defaultMessage="Please enter password！"
-                />
-              ),
+              message: 'Please enter password！',
             },
           ]}
         />

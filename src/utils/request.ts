@@ -65,7 +65,7 @@ const request = extend({
  * 请求拦截器，在请求之前，加上Header头
  */
 request.interceptors.request.use((url, options) => {
-  const token = 'hello';
+  const token = localStorage.getItem('access_token') || '';
   const headers = {
     Authorization: `Bearer ${token}`,
   };
