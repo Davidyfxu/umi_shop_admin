@@ -3,10 +3,10 @@ import { Avatar, Menu, Spin } from 'antd';
 import React from 'react';
 import type { ConnectProps } from 'umi';
 import { connect, history } from 'umi';
-import type { ConnectState } from '@/models/connect';
 import type { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import { ConnectState } from '@/models/connect';
 
 export type GlobalHeaderRightProps = {
   currentUser?: CurrentUser;
@@ -18,10 +18,9 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     const { key } = event;
     if (key === 'logout') {
       const { dispatch } = this.props;
-
       if (dispatch) {
         dispatch({
-          type: 'Login/logout',
+          type: 'login/logout',
         });
       }
 
@@ -64,7 +63,13 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     return currentUser && currentUser.name ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+          <Avatar
+            size="small"
+            className={styles.avatar}
+            src={currentUser.avatar_url}
+            alt="avatar"
+          />
+          {currentUser.name}
         </span>
       </HeaderDropdown>
     ) : (

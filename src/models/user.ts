@@ -48,8 +48,29 @@ const UserModel: UserModelType = {
         payload: response,
       });
     },
+    /**
+     * 获取当前登录用户数据
+     * @param _
+     * @param call
+     * @param put
+     */
     *fetchCurrent(_, { call, put }) {
+      // 看localStorage有无用户信息
+      // let userInfo;
+      // let userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+      //
+      // if (!userInfo) {
+      //   userInfo = yield call(queryCurrent);
+      //   // 判断是否获取到用户信息
+      //   if (userInfo.id !== undefined) {
+      //     // 把用户信息存入localstorage
+      //     localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      //   }
+      // }
+
       const response = yield call(queryCurrent);
+      console.log('response222', response);
+
       yield put({
         type: 'saveCurrentUser',
         payload: response,
@@ -62,21 +83,6 @@ const UserModel: UserModelType = {
       return {
         ...state,
         currentUser: action.payload || {},
-      };
-    },
-    changeNotifyCount(
-      state = {
-        currentUser: {},
-      },
-      action,
-    ) {
-      return {
-        ...state,
-        currentUser: {
-          ...state.currentUser,
-          notifyCount: action.payload.totalCount,
-          unreadCount: action.payload.unreadCount,
-        },
       };
     },
   },

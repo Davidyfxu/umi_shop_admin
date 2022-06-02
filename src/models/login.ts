@@ -34,7 +34,10 @@ const Model: LoginModelType = {
     *login({ payload }, { call, put }) {
       const response = yield call(fakeAccountLogin, payload);
 
-      if (!response.status) {
+      if (response.status === undefined) {
+        // 提醒登录成功
+        message.success('登录成功').then((r) => r);
+
         yield put({
           type: 'changeLoginStatus',
           payload: response,
@@ -42,48 +45,33 @@ const Model: LoginModelType = {
         // 跳转首页
         history.replace('/');
       }
-
-      // Login successfully
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        message.success('🎉 🎉 🎉  登录成功！');
-        let { redirect } = params as { redirect: string };
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (window.routerBase !== '/') {
-              redirect = redirect.replace(window.routerBase, '/');
-            }
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
-          }
-        }
-        history.replace(redirect || '/');
-      }
     },
 
-    logout() {
-      const { redirect } = getPageQuery();
-      // Note: There may be security issues, please note
-      if (window.location.pathname !== '/user/Login' && !redirect) {
-        history.replace({
-          pathname: '/user/Login',
-          search: stringify({
-            redirect: window.location.href,
-          }),
-        });
+    *logout(_: any, { call }: any) {
+      // loading
+      const load = message.loading('退出中...');
+
+      // 请求api，退出登录
+      // @ts-ignore
+      const response = yield call(logout);
+
+      // 判断是否登录成功
+      if (!response.status) {
+        // 删除本地存储的token和userInfo
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('userInfo');
+        message.success('退出成功').then((r) => r);
+
+        // 重定向
+        history.replace('/login');
       }
+
+      load();
     },
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
+    changeLoginStatus(state: any, { payload }: any) {
       // 将token存入localStorage
       localStorage.setItem('access_token', payload.access_token);
       return {

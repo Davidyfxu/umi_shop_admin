@@ -1,38 +1,28 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Alert, Tabs } from 'antd';
-import React, { useState } from 'react';
+import { Tabs } from 'antd';
+import React from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
 import type { Dispatch } from 'umi';
-import { connect, FormattedMessage, useIntl } from 'umi';
+import { connect } from 'umi';
 import type { LoginParamsType } from '@/services/login';
-import type { StateType } from '@/models/login';
 import type { ConnectState } from '@/models/connect';
 
 import styles from './index.less';
 
 export type LoginProps = {
   dispatch: Dispatch;
-  userLogin: StateType;
+  userLogin: any;
   submitting?: boolean;
 };
 
-const LoginMessage: React.FC<{
-  content: string;
-}> = ({ content }) => (
-  <Alert
-    style={{
-      marginBottom: 24,
-    }}
-    message={content}
-    type="error"
-    showIcon
-  />
-);
-
 const Login: React.FC<LoginProps> = (props) => {
-  const { userLogin = {}, submitting } = props;
-  const { status } = userLogin;
-  const intl = useIntl();
+  // useEffect(() => {
+  //   // 如果已经登录，则直接去首页
+  //   const userInfo = localStorage.getItem('userInfo');
+  //   if (userInfo) history.replace('/');
+  // }, []);
+
+  const { submitting } = props;
 
   const handleSubmit = (values: LoginParamsType) => {
     const { dispatch } = props;
@@ -58,25 +48,13 @@ const Login: React.FC<LoginProps> = (props) => {
           },
         }}
         onFinish={(values) => {
-          console.log(values);
-
           handleSubmit(values as LoginParamsType);
           return Promise.resolve();
         }}
       >
         <Tabs activeKey="account">
-          <Tabs.TabPane
-            key="account"
-            tab={intl.formatMessage({
-              id: 'pages.login.accountLogin.tab',
-              defaultMessage: 'Account password Login',
-            })}
-          />
+          <Tabs.TabPane key="account" tab={'账号秘密登录'} />
         </Tabs>
-
-        {status === 'error' && !submitting && (
-          <LoginMessage content={'Incorrect account or password(xyf@a.com/123123)'} />
-        )}
 
         <ProFormText
           name="email"
@@ -84,7 +62,7 @@ const Login: React.FC<LoginProps> = (props) => {
             size: 'large',
             prefix: <UserOutlined className={styles.prefixIcon} />,
           }}
-          placeholder={'邮箱: xyf@a.com'}
+          placeholder={'邮箱: xyf0602@a.com'}
           rules={[
             {
               required: true,
