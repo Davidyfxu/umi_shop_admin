@@ -5,18 +5,24 @@ import ProForm, {
   ProFormUploadButton,
 } from '@ant-design/pro-form';
 import type { CreateUserType, UpdateUserType } from '@/pages/types';
-import { message, Modal, Skeleton } from 'antd';
+import { message, Modal, Skeleton, Cascader } from 'antd';
 import { addUser, showUser, updateUser } from '@/services/user';
 import React, { useEffect, useState } from 'react';
+import { getCategory } from '@/services/category';
+import type { Category } from '@/pages/types';
 
 const CreateOrEdit: React.FC<any> = (props: any) => {
   const { isModalVisible, isShowModal, actionRef, editId } = props;
   const [initialValues, setInitialValues] = useState<UpdateUserType>();
-
+  const [options, setOptions] = useState<Category[]>([]);
   const type = !editId ? '添加' : '编辑';
 
   useEffect(() => {
     (async () => {
+      const resCategory = await getCategory();
+      if (!resCategory.status) {
+        setOptions(resCategory);
+      }
       if (editId) {
         const response = await showUser(editId);
         setInitialValues({
@@ -44,6 +50,11 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
       isShowModal(false);
     }
   };
+
+  const onChange = (value: string[]) => {
+    console.log(value);
+  };
+
   return (
     <Modal
       title={`${type}商品`}
@@ -61,12 +72,18 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
             initialValues={initialValues}
             onFinish={(values: CreateUserType) => handleSubmit(values)}
           >
-            <ProFormText
+            <ProForm.Item
               name="category_id"
               label="分类"
-              placeholder="请输入分类"
               rules={[{ required: true, message: '请输入昵称' }]}
-            />
+            >
+              <Cascader
+                fieldNames={{ label: 'name', value: 'id' }}
+                options={options}
+                onChange={(values: any) => onChange(values)}
+                placeholder="请选择分类"
+              />
+            </ProForm.Item>
             <ProFormText
               name="title"
               label="商品名"

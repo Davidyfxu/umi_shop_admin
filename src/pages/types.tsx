@@ -58,3 +58,12 @@ export interface GoodsItem {
   created_at: string;
   updated_at: string;
 }
+
+export interface Category {
+  id: number;
+  pid: number;
+  name: string;
+  level: number;
+  status: number;
+  children?: Category[];
+}
