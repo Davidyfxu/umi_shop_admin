@@ -3,19 +3,17 @@ import React, { useRef, useState } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { Avatar, Button, message, Modal, Switch } from 'antd';
+import { Avatar, Button, message, Switch } from 'antd';
 import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { ActionType, UserInfo } from '@/pages/types';
-import { addUser, getUsers, lockUser } from '@/services/user';
-import ProForm, { ProFormText } from '@ant-design/pro-form';
-import type { CreateUserType, FilterUser } from '@/pages/types';
+import { getUsers, lockUser } from '@/services/user';
+import type { FilterUser } from '@/pages/types';
+import Create from '@/pages/User/components/Create';
 
 const User: React.FC<any> = () => {
   // 表格的ref, 便于自定义操作表格
   const actionRef = useRef<ActionType>();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-
-  function isShowModal(show: boolean, id: number) {}
 
   /* 获取列表数据，含筛选功能 */
   const getData = async (params: FilterUser) => {
@@ -35,25 +33,9 @@ const User: React.FC<any> = () => {
     }
   };
 
-  /* 关闭模态框 */
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
-  /* 打开添加表单 */
-  const openCreateForm = () => {
-    setIsModalVisible(true);
-  };
-
-  /* 添加用户 */
-  const createUser = async (values: CreateUserType) => {
-    const response = await addUser(values);
-    if (!response.status) {
-      message.success('添加成功');
-      // 刷新表格数据
-      actionRef.current?.reload();
-      //关闭模态框
-      setIsModalVisible(false);
-    }
+  /* 控制模态框的显示与隐藏 */
+  const isShowModal = (show: boolean) => {
+    setIsModalVisible(show);
   };
 
   const columns: ProColumns<UserInfo>[] = [
@@ -94,7 +76,7 @@ const User: React.FC<any> = () => {
     {
       title: '操作',
       hideInSearch: true,
-      render: (_, record) => <a onClick={() => isShowModal(true, record.id)}>编辑</a>,
+      // render: (text: ReactNode, record: UserInfo) => <a onClick={() => isShowModal(true)}>编辑</a>,
     },
   ];
 
@@ -102,7 +84,7 @@ const User: React.FC<any> = () => {
     <PageContainer>
       <ProTable<any>
         columns={columns}
-        actionRef={actionRef}
+        actionRef={actionRef as any}
         cardBordered
         request={(params: any = {}) => getData(params)}
         rowKey="id"
@@ -120,47 +102,14 @@ const User: React.FC<any> = () => {
             key="button"
             icon={<PlusOutlined />}
             type="primary"
-            onClick={() => openCreateForm()}
+            onClick={() => isShowModal(true)}
           >
             新建
           </Button>,
         ]}
       />
       );
-      <Modal
-        title="添加用户"
-        visible={isModalVisible}
-        onCancel={closeModal}
-        footer={null}
-        destroyOnClose={true}
-      >
-        <ProForm onFinish={(values: CreateUserType) => createUser(values)}>
-          <ProFormText
-            name="name"
-            label="昵称"
-            placeholder="请输入昵称"
-            rules={[{ required: true, message: '请输入昵称' }]}
-          />
-          <ProFormText
-            name="email"
-            label="邮箱"
-            placeholder="请输入邮箱"
-            rules={[
-              { required: true, message: '请输入邮箱' },
-              { type: 'email', message: '邮箱格式不正确' },
-            ]}
-          />
-          <ProFormText.Password
-            name="password"
-            label="密码"
-            placeholder="请输入密码"
-            rules={[
-              { required: true, message: '请输入密码' },
-              { min: 6, message: '密码最小6位' },
-            ]}
-          />
-        </ProForm>
-      </Modal>
+      <Create isModalVisible={isModalVisible} isShowModal={isShowModal} actionRef={actionRef} />
     </PageContainer>
   );
 };
