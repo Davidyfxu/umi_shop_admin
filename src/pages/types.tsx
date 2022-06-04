@@ -1,4 +1,4 @@
-import { Key } from 'react';
+import type { Key } from 'react';
 
 export interface UserInfo {
   id: 1;
@@ -37,4 +37,24 @@ export interface ActionType {
   clearSelected?: () => void;
   startEditable: (rowKey: Key) => boolean;
   cancelEditable: (rowKey: Key) => boolean;
+}
+
+export interface GoodsItem {
+  id: number;
+  title: string;
+  category_id: number;
+  user_id: number;
+  description: string;
+  price: number;
+  stock: number;
+  sales: number;
+  cover: string;
+  cover_url: string;
+  pics?: any;
+  pics_url: any[];
+  details: string;
+  is_on: number;
+  is_recommend: number;
+  created_at: string;
+  updated_at: string;
 }

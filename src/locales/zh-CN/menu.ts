@@ -62,5 +62,5 @@ export default {
   'menu.dashboardworkplace': '工作台',
   'menu.dashboard': '统计面板',
   'menu.user': '用户管理',
-  'menu.goods': '首页统计',
+  'menu.goods': '商品管理',
 };
