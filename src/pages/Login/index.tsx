@@ -1,9 +1,9 @@
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
 import type { Dispatch } from 'umi';
-import { connect } from 'umi';
+import { connect, history } from 'umi';
 import type { LoginParamsType } from '@/services/login';
 import type { ConnectState } from '@/models/connect';
 
@@ -16,11 +16,11 @@ export type LoginProps = {
 };
 
 const Login: React.FC<LoginProps> = (props) => {
-  // useEffect(() => {
-  //   // 如果已经登录，则直接去首页
-  //   const userInfo = localStorage.getItem('userInfo');
-  //   if (userInfo) history.replace('/');
-  // }, []);
+  useEffect(() => {
+    // 如果已经登录，则直接去首页
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) history.replace('/');
+  }, []);
 
   const { submitting } = props;
 

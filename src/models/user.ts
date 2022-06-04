@@ -1,9 +1,9 @@
 import type { Effect, Reducer } from 'umi';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import { queryCurrent } from '@/services/user';
 
 export type CurrentUser = {
-  id: number;
+  id?: number;
   avatar?: string;
   name?: string;
   title?: string;
@@ -25,12 +25,10 @@ export type UserModelType = {
   namespace: 'user';
   state: UserModelState;
   effects: {
-    fetch: Effect;
     fetchCurrent: Effect;
   };
   reducers: {
     saveCurrentUser: Reducer<UserModelState>;
-    changeNotifyCount: Reducer<UserModelState>;
   };
 };
 
@@ -42,13 +40,6 @@ const UserModel: UserModelType = {
   },
 
   effects: {
-    *fetch(_, { call, put }) {
-      const response = yield call(queryUsers);
-      yield put({
-        type: 'save',
-        payload: response,
-      });
-    },
     /**
      * 获取当前登录用户数据
      * @param _
@@ -56,18 +47,17 @@ const UserModel: UserModelType = {
      * @param put
      */
     *fetchCurrent(_, { call, put }) {
-      // 看localStorage有无用户信息
-      // let userInfo;
-      // let userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
-      //
-      // if (!userInfo) {
-      //   userInfo = yield call(queryCurrent);
-      //   // 判断是否获取到用户信息
-      //   if (userInfo.id !== undefined) {
-      //     // 把用户信息存入localstorage
-      //     localStorage.setItem('userInfo', JSON.stringify(userInfo));
-      //   }
-      // }
+      // 看localStorage有无用户信息，没有再请求
+      let userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+
+      if (!userInfo) {
+        userInfo = yield call(queryCurrent);
+        // 判断是否获取到用户信息
+        if (userInfo.id !== undefined) {
+          // 把用户信息存入localstorage
+          localStorage.setItem('userInfo', JSON.stringify(userInfo));
+        }
+      }
 
       const response = yield call(queryCurrent);
 

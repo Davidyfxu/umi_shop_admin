@@ -23,7 +23,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
           type: 'login/logout',
         });
       }
-
       return;
     }
 
@@ -33,7 +32,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   render(): React.ReactNode {
     const {
       currentUser = {
-        avatar: '',
+        avatar_url: '',
         name: '',
       },
       menu,

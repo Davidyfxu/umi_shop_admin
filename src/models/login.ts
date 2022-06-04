@@ -1,10 +1,6 @@
-import { stringify } from 'querystring';
 import type { Reducer, Effect } from 'umi';
 import { history } from 'umi';
-
-import { fakeAccountLogin } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
+import { fakeAccountLogin, logout } from '@/services/login';
 import { message } from 'antd';
 
 export type StateType = {
@@ -52,7 +48,6 @@ const Model: LoginModelType = {
       const load = message.loading('退出中...');
 
       // 请求api，退出登录
-      // @ts-ignore
       const response = yield call(logout);
 
       // 判断是否登录成功
