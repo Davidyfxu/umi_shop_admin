@@ -6,3 +6,22 @@ import request from '@/utils/request';
 export async function queryCurrent(): Promise<any> {
   return request('/admin/user');
 }
+
+/**
+ * 获取用户列表
+ */
+export async function getUsers(params: {
+  name?: string;
+  email?: string;
+  phone?: number;
+}): Promise<any> {
+  return request('/admin/users', { params });
+}
+
+/**
+ * 禁用与启用用户
+ * @param uid 用户id
+ */
+export async function lockUser(uid: number) {
+  return request.patch(`/admin/users/${uid}/lock`);
+}
