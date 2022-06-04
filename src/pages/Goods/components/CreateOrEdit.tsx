@@ -1,21 +1,20 @@
-import ProForm, {
-  ProFormDigit,
-  ProFormText,
-  ProFormTextArea,
-  ProFormUploadButton,
-} from '@ant-design/pro-form';
+import ProForm, { ProFormDigit, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { CreateUserType, UpdateUserType } from '@/pages/types';
-import { message, Modal, Skeleton, Cascader } from 'antd';
+import { message, Modal, Skeleton, Cascader, Button } from 'antd';
 import { addUser, showUser, updateUser } from '@/services/user';
 import React, { useEffect, useState } from 'react';
 import { getCategory } from '@/services/category';
 import type { Category } from '@/pages/types';
+import AliyunOSSUpload from '@/components/AliyunOSSUpload';
+import { UploadOutlined } from '@ant-design/icons';
 
 const CreateOrEdit: React.FC<any> = (props: any) => {
   const { isModalVisible, isShowModal, actionRef, editId } = props;
   const [initialValues, setInitialValues] = useState<UpdateUserType>();
   const [options, setOptions] = useState<Category[]>([]);
   const type = !editId ? '添加' : '编辑';
+  // 定义Form实例，用来操作表单
+  const [form] = ProForm.useForm();
 
   useEffect(() => {
     (async () => {
@@ -32,7 +31,10 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
       }
     })();
   }, []);
-
+  // 文件上传成功后，设置cover字段的value
+  const setCoverKey = (fileKey: any) => {
+    form.setFieldsValue({ cover: fileKey });
+  };
   /* 提交表单, 执行编辑或者添加 */
   const handleSubmit = async (values: CreateUserType | UpdateUserType) => {
     let response;
@@ -51,7 +53,7 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
     }
   };
 
-  const onChange = (value: string[]) => {
+  const onChange = (value: any) => {
     console.log(value);
   };
 
@@ -69,6 +71,7 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
           <Skeleton active={true} paragraph={{ rows: 4 }} />
         ) : (
           <ProForm
+            form={form}
             initialValues={initialValues}
             onFinish={(values: CreateUserType) => handleSubmit(values)}
           >
@@ -112,12 +115,18 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
               max={99999999}
               rules={[{ required: true, message: '请输入库存' }]}
             />
-            <ProFormUploadButton
-              label="上传"
+
+            <ProForm.Item
+              label="商品主图"
               name="cover"
-              action={'action.do'}
               rules={[{ required: true, message: '请上传图片' }]}
-            />
+            >
+              <div>
+                <AliyunOSSUpload accept={'image/*'} setCoverKey={setCoverKey}>
+                  <Button icon={<UploadOutlined />}>点击上传</Button>
+                </AliyunOSSUpload>
+              </div>
+            </ProForm.Item>
             <ProFormTextArea
               name="details"
               label="详情"

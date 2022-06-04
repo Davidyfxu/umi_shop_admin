@@ -67,3 +67,28 @@ export interface Category {
   status: number;
   children?: Category[];
 }
+
+export interface OriginFileObj {
+  uid: string;
+  key: string;
+  url: string;
+}
+
+export interface Xhr {}
+
+export interface FileType {
+  uid: string;
+  key: string;
+  url: string;
+  lastModified: number;
+  lastModifiedDate: Date;
+  name: string;
+  size: number;
+  type: string;
+  percent: number;
+  originFileObj: OriginFileObj;
+  status: string;
+  response: string;
+  xhr: Xhr;
+  thumbUrl: string;
+}
