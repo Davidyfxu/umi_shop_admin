@@ -8,12 +8,13 @@ import { PlusOutlined, UserOutlined } from '@ant-design/icons';
 import type { ActionType, UserInfo } from '@/pages/types';
 import { getUsers, lockUser } from '@/services/user';
 import type { FilterUser } from '@/pages/types';
-import Create from '@/pages/User/components/Create';
+import CreateOrEdit from '@/pages/User/components/CreateOrEdit';
 
 const User: React.FC<any> = () => {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [editId, setEditId] = useState<number>();
   // 表格的ref, 便于自定义操作表格
   const actionRef = useRef<ActionType>();
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   /* 获取列表数据，含筛选功能 */
   const getData = async (params: FilterUser) => {
@@ -24,7 +25,6 @@ const User: React.FC<any> = () => {
       total: response.meta.pagination.total,
     };
   };
-
   /* 封禁与启用用户 */
   const handleLockUser = async (uid: number) => {
     const response = await lockUser(uid);
@@ -32,10 +32,10 @@ const User: React.FC<any> = () => {
       message.success('操作成功');
     }
   };
-
   /* 控制模态框的显示与隐藏 */
-  const isShowModal = (show: boolean) => {
+  const isShowModal = (show: boolean, id?: number) => {
     setIsModalVisible(show);
+    setEditId(id);
   };
 
   const columns: ProColumns<UserInfo>[] = [
@@ -76,7 +76,9 @@ const User: React.FC<any> = () => {
     {
       title: '操作',
       hideInSearch: true,
-      // render: (text: ReactNode, record: UserInfo) => <a onClick={() => isShowModal(true)}>编辑</a>,
+      render: (text: ReactNode, record: UserInfo) => (
+        <a onClick={() => isShowModal(true, record.id)}>编辑</a>
+      ),
     },
   ];
 
@@ -109,7 +111,14 @@ const User: React.FC<any> = () => {
         ]}
       />
       );
-      <Create isModalVisible={isModalVisible} isShowModal={isShowModal} actionRef={actionRef} />
+      {isModalVisible && (
+        <CreateOrEdit
+          isModalVisible={isModalVisible}
+          isShowModal={isShowModal}
+          actionRef={actionRef}
+          editId={editId}
+        />
+      )}
     </PageContainer>
   );
 };

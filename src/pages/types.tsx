@@ -19,6 +19,11 @@ export interface CreateUserType {
   password: string;
 }
 
+export interface UpdateUserType {
+  name: string;
+  email: string;
+}
+
 export interface FilterUser {
   name?: string;
   email?: string;

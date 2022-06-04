@@ -61,6 +61,6 @@ export default {
   'menu.todo': '待办事项',
   'menu.dashboardworkplace': '工作台',
   'menu.dashboard': '统计面板',
-  'menu.user': '用户',
+  'menu.user': '用户管理',
   'menu.goods': '首页统计',
 };

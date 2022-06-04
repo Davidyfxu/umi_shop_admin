@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import { CreateUserType } from '@/pages/types';
+import { CreateUserType, UpdateUserType } from '@/pages/types';
 
 /**
  * 获取当前登录的用户信息
@@ -32,4 +32,18 @@ export async function lockUser(uid: number) {
  */
 export async function addUser(params: CreateUserType) {
   return request.post('/admin/users', { params });
+}
+
+/**
+ * 更新用户
+ */
+export async function updateUser(editId: number, data: UpdateUserType) {
+  return request.put(`/admin/users/${editId}`, { data });
+}
+
+/**
+ * 用户详情
+ */
+export async function showUser(editId: number) {
+  return request.get(`/admin/users/${editId}`);
 }
