@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import { CreateUserType } from '@/pages/types';
 
 /**
  * 获取当前登录的用户信息
@@ -24,4 +25,11 @@ export async function getUsers(params: {
  */
 export async function lockUser(uid: number) {
   return request.patch(`/admin/users/${uid}/lock`);
+}
+
+/**
+ * 添加用户
+ */
+export async function addUser(params: CreateUserType) {
+  return request.post('/admin/users', { params });
 }
