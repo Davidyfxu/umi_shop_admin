@@ -23,6 +23,28 @@ export default [
             component: '../layouts/BasicLayout',
             routes: [
               {
+                path: '/',
+                redirect: '/dashboard',
+              },
+              {
+                path: '/dashboard',
+                name: 'dashboard',
+                icon: 'PieChartOutlined',
+                component: '@/pages/DashBoard',
+              },
+              {
+                path: '/user',
+                name: 'user',
+                icon: 'UserOutlined',
+                component: '@/pages/User',
+              },
+              {
+                path: '/goods',
+                name: 'goods',
+                icon: 'ShoppingOutlined',
+                component: '@/pages/Goods',
+              },
+              {
                 component: './404',
               },
             ],
