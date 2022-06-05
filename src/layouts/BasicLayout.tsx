@@ -104,7 +104,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
       menuItemRender={(menuItemProps, defaultDom) => {
-        console.log(defaultDom);
         if (
           menuItemProps.isUrl ||
           !menuItemProps.path ||
