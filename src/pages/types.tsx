@@ -92,3 +92,14 @@ export interface FileType {
   xhr: Xhr;
   thumbUrl: string;
 }
+
+export interface GoodsAddType {
+  category_id: number | number[];
+  title: string;
+  description: string;
+  price: number;
+  stock: number;
+  cover: string;
+  details: string;
+  cover_url?: string;
+}

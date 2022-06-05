@@ -30,7 +30,7 @@ export interface OSSTokenType {
 }
 
 const AliyunOSSUpload: React.FC<any> = (props: any) => {
-  const { value, accept, setCoverKey } = props;
+  const { value, accept, setCoverKey = null, showUploadList, insertImage = null } = props;
   const [OSSData, setOSSData] = useState<OSSTokenType>();
 
   /* 初始化，获取OSS上传签名 */
@@ -52,7 +52,13 @@ const AliyunOSSUpload: React.FC<any> = (props: any) => {
   const handleChange = ({ file }: { file: FileType }) => {
     if (file.status === 'done') {
       // 上传成功后, 把文件的key, 设置为表单某个字段的值
-      setCoverKey(file.key);
+      if (setCoverKey) {
+        setCoverKey(file.key);
+      }
+      // 上传完成后，如果需要url，那么返回url给父组件
+      if (insertImage) {
+        insertImage(file.url);
+      }
       message.success('上传成功');
     }
   };
@@ -79,7 +85,7 @@ const AliyunOSSUpload: React.FC<any> = (props: any) => {
     // 云存储中存储文件的key
     file.key = OSSData.dir + dir + filename;
     // 上传完成后显示内容
-    file.url = OSSData.host + OSSData.dir + filename;
+    file.url = OSSData.host + file.key;
     return file;
   };
 
@@ -93,6 +99,7 @@ const AliyunOSSUpload: React.FC<any> = (props: any) => {
     beforeUpload,
     listType: 'picture',
     maxCount: 1,
+    showUploadList,
   };
   return <Upload {...uploadProps}>{props.children}</Upload>;
 };

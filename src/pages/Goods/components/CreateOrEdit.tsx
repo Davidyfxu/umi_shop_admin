@@ -1,16 +1,16 @@
 import ProForm, { ProFormDigit, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
-import type { CreateUserType, UpdateUserType } from '@/pages/types';
-import { message, Modal, Skeleton, Cascader, Button } from 'antd';
-import { addUser, showUser, updateUser } from '@/services/user';
+import { message, Modal, Skeleton, Cascader, Button, Image } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getCategory } from '@/services/category';
-import type { Category } from '@/pages/types';
+import type { Category, GoodsAddType } from '@/pages/types';
 import AliyunOSSUpload from '@/components/AliyunOSSUpload';
 import { UploadOutlined } from '@ant-design/icons';
+import Editor from '@/components/Editor';
+import { addGoods, showGoods, updateGoods } from '@/services/goods';
 
 const CreateOrEdit: React.FC<any> = (props: any) => {
   const { isModalVisible, isShowModal, actionRef, editId } = props;
-  const [initialValues, setInitialValues] = useState<UpdateUserType>();
+  const [initialValues, setInitialValues] = useState<GoodsAddType>();
   const [options, setOptions] = useState<Category[]>([]);
   const type = !editId ? '添加' : '编辑';
   // 定义Form实例，用来操作表单
@@ -23,10 +23,13 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
         setOptions(resCategory);
       }
       if (editId) {
-        const response = await showUser(editId);
+        const response = await showGoods(editId);
+        console.log(response);
+        const { pid = 0, id } = response.category;
+        const defaultCategory = pid === 0 ? [id] : [pid, id];
         setInitialValues({
-          name: response.name,
-          email: response.email,
+          ...response,
+          category_id: defaultCategory,
         });
       }
     })();
@@ -35,13 +38,17 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
   const setCoverKey = (fileKey: any) => {
     form.setFieldsValue({ cover: fileKey });
   };
+  // 文件上传成功后，设置details字段的value
+  const setDetails = (content: any) => {
+    form.setFieldsValue({ details: content });
+  };
   /* 提交表单, 执行编辑或者添加 */
-  const handleSubmit = async (values: CreateUserType | UpdateUserType) => {
+  const handleSubmit = async (values: GoodsAddType) => {
     let response;
     if (!editId) {
-      response = await addUser(values as CreateUserType);
+      response = await addGoods({ ...values, category_id: values.category_id[1] });
     } else {
-      response = await updateUser(editId, values as UpdateUserType);
+      response = await updateGoods(editId, { ...values, category_id: values.category_id[1] });
     }
 
     if (!response.status) {
@@ -73,7 +80,7 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
           <ProForm
             form={form}
             initialValues={initialValues}
-            onFinish={(values: CreateUserType) => handleSubmit(values)}
+            onFinish={(values: any) => handleSubmit(values)}
           >
             <ProForm.Item
               name="category_id"
@@ -115,7 +122,7 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
               max={99999999}
               rules={[{ required: true, message: '请输入库存' }]}
             />
-
+            <ProFormText name="cover" hidden={true} />
             <ProForm.Item
               label="商品主图"
               name="cover"
@@ -125,14 +132,17 @@ const CreateOrEdit: React.FC<any> = (props: any) => {
                 <AliyunOSSUpload accept={'image/*'} setCoverKey={setCoverKey}>
                   <Button icon={<UploadOutlined />}>点击上传</Button>
                 </AliyunOSSUpload>
+                {initialValues?.cover_url && <Image width={200} src={initialValues.cover_url} />}
               </div>
             </ProForm.Item>
-            <ProFormTextArea
+
+            <ProForm.Item
+              label="商品详情"
               name="details"
-              label="详情"
-              placeholder="请输入详情"
               rules={[{ required: true, message: '请输入详情' }]}
-            />
+            >
+              <Editor setDetails={setDetails} content={initialValues?.details} />
+            </ProForm.Item>
           </ProForm>
         )
       }

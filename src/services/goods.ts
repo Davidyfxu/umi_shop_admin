@@ -1,4 +1,5 @@
 import request from '@/utils/request';
+import { GoodsAddType, GoodsItem } from '@/pages/types';
 
 /**
  * 获取商品列表
@@ -22,23 +23,23 @@ export async function isRecommend(goodsId: number) {
   return request.patch(`/admin/goods/${goodsId}/recommend`);
 }
 
-// /**
-//  * 添加用户
-//  */
-// export async function addUser(params: CreateUserType) {
-//   return request.post('/admin/users', { params });
-// }
-//
-// /**
-//  * 更新用户
-//  */
-// export async function updateUser(editId: number, data: UpdateUserType) {
-//   return request.put(`/admin/users/${editId}`, { data });
-// }
-//
-// /**
-//  * 用户详情
-//  */
-// export async function showUser(editId: number) {
-//   return request.get(`/admin/users/${editId}`);
-// }
+/**
+ * 添加商品
+ */
+export async function addGoods(params: GoodsAddType) {
+  return request.post('/admin/goods', { params });
+}
+
+/**
+ * 更新商品
+ */
+export async function updateGoods(editId: number, params: any) {
+  return request.put(`/admin/goods/${editId}`, { params });
+}
+
+/**
+ * 商品详情
+ */
+export async function showGoods(editId: number) {
+  return request.get(`/admin/goods/${editId}?include=category`);
+}
