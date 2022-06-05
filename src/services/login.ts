@@ -7,12 +7,12 @@ export type LoginParamsType = {
 
 /**
  * 执行登录，获取token
- * @param params
+ * @param data
  */
-export async function fakeAccountLogin(params: LoginParamsType) {
+export async function fakeAccountLogin(data: LoginParamsType) {
   return request('/auth/login', {
     method: 'POST',
-    data: params,
+    data,
   });
 }
 

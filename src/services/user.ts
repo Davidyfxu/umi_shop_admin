@@ -30,8 +30,8 @@ export async function lockUser(uid: number) {
 /**
  * 添加用户
  */
-export async function addUser(params: CreateUserType) {
-  return request.post('/admin/users', { params });
+export async function addUser(data: CreateUserType) {
+  return request.post('/admin/users', { data });
 }
 
 /**

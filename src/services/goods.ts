@@ -26,15 +26,15 @@ export async function isRecommend(goodsId: number) {
 /**
  * 添加商品
  */
-export async function addGoods(params: GoodsAddType) {
-  return request.post('/admin/goods', { params });
+export async function addGoods(data: GoodsAddType) {
+  return request.post('/admin/goods', { data });
 }
 
 /**
  * 更新商品
  */
-export async function updateGoods(editId: number, params: any) {
-  return request.put(`/admin/goods/${editId}`, { params });
+export async function updateGoods(editId: number, data: any) {
+  return request.put(`/admin/goods/${editId}`, { data });
 }
 
 /**
