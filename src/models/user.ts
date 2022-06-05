@@ -53,7 +53,7 @@ const UserModel: UserModelType = {
       if (!userInfo) {
         userInfo = yield call(queryCurrent);
         // 判断是否获取到用户信息
-        if (userInfo.id !== undefined) {
+        if (!userInfo.id) {
           // 把用户信息存入localstorage
           localStorage.setItem('userInfo', JSON.stringify(userInfo));
         }
