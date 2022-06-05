@@ -103,6 +103,19 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       {...settings}
       onCollapse={handleMenuCollapse}
       onMenuHeaderClick={() => history.push('/')}
+      menuItemRender={(menuItemProps, defaultDom) => {
+        console.log(defaultDom);
+        if (
+          menuItemProps.isUrl ||
+          !menuItemProps.path ||
+          location.pathname === menuItemProps.path
+        ) {
+          return defaultDom;
+        }
+
+        // @ts-ignore
+        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+      }}
       breadcrumbRender={(routers = []) => [
         {
           path: '/',
