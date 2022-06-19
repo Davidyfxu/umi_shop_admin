@@ -6,6 +6,7 @@ import { useIntl } from 'umi';
 
 export default (): React.ReactNode => {
   const intl = useIntl();
+
   return (
     <PageHeaderWrapper
       content={intl.formatMessage({
